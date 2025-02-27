@@ -2,11 +2,16 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Streetunes.Data;
 using Microsoft.EntityFrameworkCore;
+using Streetunes.Models;
+using Streetunes;
+using Streetunes.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IEventReposiroty, EventRepository>();
 
 builder.Services.AddDbContext<ApplicationDBcontext>(options =>
 {
@@ -35,6 +40,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
