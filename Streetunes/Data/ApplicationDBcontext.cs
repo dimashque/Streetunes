@@ -18,6 +18,8 @@ namespace Streetunes.Data
            
             }
             public DbSet<Event> Events { get; set; }
+            public DbSet<Address> Addresses { get; set; }
+            public DbSet<Comment> Comments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

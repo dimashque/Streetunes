@@ -20,10 +20,12 @@ namespace Streetunes.Models
         public EventCategory EventCategory { get; set; }
         public string? Description { get; set; }
 
-        [ForeignKey("Owner")]
+        [ForeignKey("AppUser")]
         public string OwnerId { get; set; }   // Foreign Key for the creator of the club
         public AppUser Owner { get; set; }    // Navigation property for the creator
 
         public ICollection<AppUser>? Followers { get; set; }  // Many-to-Many Relationship
+
+        public ICollection<Comment>? Comments { get; set; }
     }
 }

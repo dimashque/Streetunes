@@ -53,6 +53,17 @@ namespace Streetunes.Repository
             return await _context.Events.Where(e => e.Address.PostalCode.Contains(plz)).ToListAsync();
         }
 
+        public async Task<AppUser> GetCurrentUser(string id)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public bool AddComment(Comment comment)
+        {
+             _context.Comments.Add(comment);
+            return Save();
+        }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();
