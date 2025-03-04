@@ -13,6 +13,8 @@ namespace Streetunes.Models
         public string? City { get; set; }
 
         public string? State { get; set; }
-         public ICollection<Event>? Events { get; set; }  // Many-to-Many Relationship
+        public ICollection<Event>? Events { get; set; } = new List<Event>();  // Many-to-Many Relationship
+
+        public ICollection<Event>? CreatedEvents { get; set; } = new List<Event>();
     }
 }

@@ -42,7 +42,8 @@ namespace Streetunes.Controllers
 
                 if (homeVM.City != null)
                 {
-                    homeVM.Events = await _eventRepository.GetEventByPLZ(homeVM.Plz);
+                    var streetEvent = await _eventRepository.GetAll();
+                    homeVM.Events = streetEvent;
 
                 }
                 else

@@ -13,5 +13,7 @@ namespace Streetunes.Models
         public string? street { get; set; }
 
         public string? Country { get; set; }
+
+        public ICollection<Event> Events { get; set; } = new List<Event>();
     }
 }

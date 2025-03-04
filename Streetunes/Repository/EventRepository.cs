@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Streetunes.Data;
 using Streetunes.Models;
 using System.Diagnostics.Eventing.Reader;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace Streetunes.Repository
@@ -35,9 +36,15 @@ namespace Streetunes.Repository
 
         public async Task<Event> GetByIdAsync(int id)
         {
-          return await _context.Events.Include(a => a.Address).Include(o => o.Owner).FirstOrDefaultAsync(x => x.Id == id);
-        }
+            return await _context.Events.Include(a => a.Address).Include(o => o.Owner).Include(e => e.Followers).Include(c => c.Comments).ThenInclude(p => p.Commentor).FirstOrDefaultAsync(x => x.Id == id);  
+                    // Eagerly load the related Address
+                      // Eagerly load the related Owner (AppUser)
+         // Eagerly load the related Comments
 
+
+            //.ThenInclude(p => p.Commentor)   // Eagerly load the related Commentor (AppUser)
+
+        }
         public async Task<Event> GetByIdAsyncNoTracking(int id)
         {
             return await _context.Events.Include(a => a.Address).Include(o => o.Owner).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);

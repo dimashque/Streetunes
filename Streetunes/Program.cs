@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Streetunes.Models;
 using Streetunes;
 using Streetunes.Repository;
+using Streetunes.Interfaces;
+using Streetunes.Services;
+using Streetunes.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IEventReposiroty, EventRepository>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
+
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 builder.Services.AddDbContext<ApplicationDBcontext>(options =>
 {
@@ -26,6 +32,12 @@ builder.Services.AddSession();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
 var app = builder.Build();
+
+if (args.Length == 1 && args[0].ToLower() == "seeddata")
+{
+   // await Seed.SeedUsersAndRolesAsync(app);
+     Seed.SeedData(app);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

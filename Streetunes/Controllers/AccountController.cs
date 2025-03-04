@@ -41,7 +41,7 @@ namespace Streetunes.Controllers
                     var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Index", "Event");
+                        return RedirectToAction("Index", "Home");
                     }
 
 

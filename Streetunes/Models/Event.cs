@@ -24,8 +24,8 @@ namespace Streetunes.Models
         public string OwnerId { get; set; }   // Foreign Key for the creator of the club
         public AppUser Owner { get; set; }    // Navigation property for the creator
 
-        public ICollection<AppUser>? Followers { get; set; }  // Many-to-Many Relationship
+        public ICollection<AppUser> Followers { get; set; } = new List<AppUser>(); // Many-to-Many Relationship
 
-        public ICollection<Comment>? Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

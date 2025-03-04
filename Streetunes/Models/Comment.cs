@@ -9,11 +9,13 @@ namespace Streetunes.Models
         public string CommentText { get; set; }
         public DateTime CreatedDate { get; set; }
         [ForeignKey("AppUser")]
-        public string CommenterId { get; set; }
+        public string CommentorId { get; set; }
 
-        public AppUser Commenter { get; set; }
+        public AppUser Commentor { get; set; }
 
         [ForeignKey("Event")]
         public int EventId { get; set; }
+
+        public Event StreetEvent { get; set; }
     }
 }
