@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Streetunes.Helpers;
 using Streetunes.Interfaces;
 using Streetunes.Models;
+using Streetunes.Repository;
 using Streetunes.ViewModel;
+using System.Globalization;
+using System.Net;
 
 namespace Streetunes.Controllers
 {
@@ -22,8 +27,42 @@ namespace Streetunes.Controllers
         public async Task <IActionResult> Index()
 
         {
-            IEnumerable<Event> events = await _eventReposiroty.GetAll();    
-            return View(events);
+            var ipInfo = new IPInfo();
+            var homeVM = new HomeViewModel();
+            try
+            {
+                string url = "https://ipinfo.io?token=50e3576ee1795b";
+                var info = new WebClient().DownloadString(url);
+                ipInfo = JsonConvert.DeserializeObject<IPInfo>(info);
+                RegionInfo myRI = new RegionInfo(ipInfo.Country);
+                ipInfo.Country = myRI.EnglishName;
+                homeVM.City = ipInfo.City;
+                homeVM.Plz = ipInfo.Postal;
+                
+
+                if (homeVM.City != null)
+                {
+                     var streetEvent = await _eventReposiroty.GetEventByRegion(ipInfo.Region);
+                    if (streetEvent.Count() == 0)
+                    {
+                        streetEvent = await _eventReposiroty.GetAll();
+                    }
+                    homeVM.Events = streetEvent;
+
+                }
+                else
+                {
+
+                    var allStreetEvents = await _eventReposiroty.GetAll();
+                    homeVM.Events = allStreetEvents;
+                }
+                return View(homeVM.Events);
+            }
+            catch (Exception ex)
+            {
+                homeVM.Events = null;
+            }
+            return View(homeVM);
         }
 
         public IActionResult Create()

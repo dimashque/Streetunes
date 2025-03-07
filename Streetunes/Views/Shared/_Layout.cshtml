@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -36,11 +38,34 @@
                                 </form>
                             </li>
                         }
+                        else
+                        {
+                            <li class="nav-item">
+                                <form asp-area="" asp-controller="Account" asp-action="Login">
+                                    <button class="btn btn-outline-secondary text-dark">Login</button>
+                                </form>
+                            </li>
+                        }
                     </ul>
+
+                    <!-- User Info Section -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item d-flex align-items-center">
+                                <!-- Optional Profile Picture (if user has one) -->
+                                <a asp-controller="User" asp-action="Detail" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">
+                                   <img src="@User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value" alt="Profile" class="rounded-circle" width="30" height="30" />
+                                </a>
+                                <span class="ms-2 text-dark">@User.Identity.Name</span> <!-- User's Name -->
+                            </li>
+                        </ul>
+                    }
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

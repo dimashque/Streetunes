@@ -55,6 +55,11 @@ namespace Streetunes.Repository
             return await _context.Events.Where(e => e.Address.City.Contains(city)).ToListAsync();
         }
 
+        public async Task<IEnumerable<Event>> GetEventByRegion(string region)
+        {
+            return await _context.Events.Where(e => e.Address.Region.Contains(region)).ToListAsync();
+        }
+
         public async Task<IEnumerable<Event>> GetEventByPLZ(string plz)
         {
             return await _context.Events.Where(e => e.Address.PostalCode.Contains(plz)).ToListAsync();

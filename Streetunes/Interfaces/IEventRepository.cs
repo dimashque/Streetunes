@@ -14,6 +14,8 @@ namespace Streetunes
 
         Task<IEnumerable<Event>> GetEventByPLZ(string plz);
 
+        Task<IEnumerable<Event>> GetEventByRegion(string region);
+
         Task<AppUser> GetCurrentUser(string id);
 
         bool AddComment(Comment comment);

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Streetunes.Data;
 using Streetunes.Models;
 using Streetunes.ViewModel;
+using System.Security.Claims;
 
 namespace Streetunes.Controllers
 {
@@ -30,6 +31,8 @@ namespace Streetunes.Controllers
             if (!ModelState.IsValid) return View(loginVM);
 
             var user = await _userManager.FindByEmailAsync(loginVM.EmailAddress);
+            var profilePictureUrl = user.ProfileImageUrl;
+            await _userManager.AddClaimAsync(user, new Claim("profile_picture", profilePictureUrl));
 
             if (user != null)
             {
