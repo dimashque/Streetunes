@@ -31,7 +31,7 @@ namespace Streetunes.Repository
 
         public async Task<IEnumerable<Event>> GetAll()
         {
-            return await _context.Events.ToListAsync();
+            return await _context.Events.Include(a => a.Address).ToListAsync();
         }
 
         public async Task<Event> GetByIdAsync(int id)

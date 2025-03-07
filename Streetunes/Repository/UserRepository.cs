@@ -29,12 +29,16 @@ namespace Streetunes.Repository
 
         public async Task<AppUser> GetById(string id)
         {
-            return await _context.Users
+            return await _context.Users.Include(u => u.CreatedEvents).Include(u => u.Events).FirstOrDefaultAsync(x => x.Id == id);
+        
+
+            /*
+             await _context.Users
         .Include(u => u.CreatedEvents)
             .ThenInclude(e => e.Address) // Ensuring Address is loaded
         .Include(u => u.Events)
             .ThenInclude(e => e.Address)
-        .FirstOrDefaultAsync(x => x.Id == id);
+        .FirstOrDefaultAsync(x => x.Id == id)*/
 
 
         }
