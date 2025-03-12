@@ -1,132 +1,176 @@
 ﻿@using Streetunes.Models
 @model IEnumerable<Event>
 
-
-
 <style>
-    /* Street Art Inspired Funky Background */
+    /* Funky Urban Gradient Background */
     body {
-        background: linear-gradient(135deg, #ff6f61, #f8cdda, #7f8c8d, #fdcb6e); /* Funky gradient */
+        background: linear-gradient(135deg, #1a1a1a, #333, #444, #666);
         color: #fff;
-        font-family: 'Arial', sans-serif;
+        font-family: 'Poppins', sans-serif;
         background-size: cover;
         background-attachment: fixed;
-        animation: backgroundAnimation 10s infinite alternate; /* Animation effect */
     }
 
-    /* Graffiti-inspired Hero Section */
+    /* Hero Section */
     .hero {
-        height: 80vh;
+        height: 70vh;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
         text-align: center;
-        background: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+        background: rgba(0, 0, 0, 0.7);
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
+        box-shadow: 0px 0px 15px rgba(255, 204, 0, 0.5);
     }
 
-    .hero h1 {
-        font-size: 4rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        text-shadow: 3px 3px 5px rgba(0,0,0,0.7);
-        color: #ffcc00;
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 5px 5px 10px rgba(255, 204, 0, 0.8);
+            color: #ffcc00;
+        }
+
+    /* Search Section */
+    .search-container {
+        max-width: 600px;
+        margin: 20px auto;
+        display: flex;
+        justify-content: center;
     }
 
-    /* Custom Buttons */
-    .btn-custom {
-        background: #ff5733;
-        color: #fff;
-        font-weight: bold;
-        padding: 12px 25px;
+    .search-input {
+        width: 80%;
+        padding: 12px;
         border-radius: 30px;
-        text-transform: uppercase;
-        transition: 0.3s;
-        border: 2px solid #ff5733;
+        border: none;
+        font-size: 16px;
+        text-align: center;
     }
 
-    .btn-custom:hover {
+    .search-button {
+        padding: 12px 20px;
+        border-radius: 30px;
+        border: none;
         background: #ffcc00;
-        color: #000;
-    }
-
-    .btn-attend {
-        background: #28a745;
-        color: #fff;
         font-weight: bold;
-        padding: 10px 20px;
-        border-radius: 30px;
-        text-transform: uppercase;
+        cursor: pointer;
         transition: 0.3s;
-        border: 2px solid #28a745;
     }
 
-    .btn-attend:hover {
-        background: #218838;
-        color: #fff;
-    }
+        .search-button:hover {
+            background: #ff5733;
+            color: white;
+        }
 
-    /* Event Card Design */
+    /* Event Card */
     .event-card {
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.12);
         padding: 15px;
-        border-radius: 10px;
+        border-radius: 15px;
         color: white;
         text-align: center;
         backdrop-filter: blur(5px);
-        box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
-        border: 2px solid #ff5733;
+        box-shadow: 0px 5px 10px rgba(255, 204, 0, 0.5);
+        transition: transform 0.3s ease;
+        border: 2px solid #ffcc00;
     }
 
-    .event-card img {
-        border-radius: 10px;
-        max-height: 200px;
-        object-fit: cover;
-        border: 3px solid #fff;
+        .event-card:hover {
+            transform: scale(1.05);
+        }
+
+        .event-card img {
+            border-radius: 10px;
+            max-height: 200px;
+            object-fit: cover;
+            border: 3px solid #fff;
+        }
+
+    .event-title {
+        font-weight: bold;
+        font-size: 1.2rem;
     }
 
-    h2 {
-        text-shadow: 3px 3px 5px rgba(0,0,0,0.7);
+    /* Floating Button */
+    .floating-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #ffcc00;
+        color: #000;
+        font-weight: bold;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+        transition: 0.3s;
     }
 
-    
+        .floating-btn:hover {
+            background: #ff5733;
+            color: white;
+        }
 </style>
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Upcoming Street Events</h2>
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>🔥 Street Events Near You 🎭</h1>
+        <p class="lead">Discover and join amazing street performances happening in your city.</p>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-container">
+        <form asp-action="Search" method="get" class="d-flex w-100">
+            <input type="text" name="location" class="search-input" placeholder="Search events by location...">
+            <button type="submit" class="search-button">🔍 Search</button>
+        </form>
+    </div>
+
+    <h2 class="text-center mb-4 mt-4">Upcoming Street Events</h2>
+
     <div class="row">
         @foreach (var ev in Model)
         {
             <div class="col-md-4 mb-4">
                 <div class="event-card">
                     <img src="@ev.Image" class="img-fluid" alt="@ev.Title">
-                    <h4 class="mt-2">@ev.Title</h4>
-                    <p><strong>Location:</strong> @ev.Address.street, @ev.Address.City</p>
-                    <p><strong>Date:</strong> @ev.Date.ToString("MMM dd, yyyy")</p>
+                    <h4 class="event-title mt-2">@ev.Title</h4>
+                    <p><strong>📍 Location:</strong> @ev.Address.street, @ev.Address.City</p>
+                    <p><strong>📅 Date:</strong> @ev.Date.ToString("MMM dd, yyyy")</p>
 
                     <!-- View Button -->
-                    <a asp-controller="Event" asp-action="Detail" asp-route-id="@ev.Id" class="btn btn-outline-light">View Event</a>
+                    <a asp-controller="Event" asp-action="Detail" asp-route-id="@ev.Id" class="btn btn-outline-light">🎭 View Event</a>
 
                     <!-- Attend Button -->
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <form asp-action="Attend" method="post">
-                            <!-- Hidden EventId -->
+                        <form asp-action="Attend" method="post" class="d-inline">
                             <input type="hidden" name="EventId" value="@ev.Id" />
-
-                            <button type="submit" class="btn btn-attend">Attend</button>
+                            <button type="submit" class="btn btn-attend">✅ Attend</button>
                         </form>
                     }
                     else
                     {
-                        <p><a asp-controller="Account" asp-action="Login" class="btn btn-custom">Please login to attend</a></p>
+                        <p><a asp-controller="Account" asp-action="Login" class="btn btn-custom">🔑 Login to Attend</a></p>
                     }
                 </div>
             </div>
         }
     </div>
 </div>
+
+<!-- Floating Create Event Button -->
+@if (User.Identity.IsAuthenticated)
+{
+    <a asp-controller="Event" asp-action="Create" class="floating-btn" title="Create Event">
+        ➕
+    </a>
+}

@@ -9,74 +9,114 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Streetunes.styles.css" asp-append-version="true" />
+
+    <style>
+        /* Navbar Styling */
+        .navbar {
+            background: #222; /* Dark urban theme */
+            border-bottom: 3px solid #ff5733; /* Neon orange accent */
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffcc00 !important; /* Neon Yellow */
+        }
+
+        .nav-link {
+            color: white !important;
+            transition: 0.3s;
+        }
+
+            .nav-link:hover {
+                color: #ff5733 !important;
+            }
+
+        /* Profile Picture Styling */
+        .profile-img {
+            border-radius: 50%;
+            object-fit: cover;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #ff5733;
+        }
+
+        /* Footer */
+        .footer {
+            background: #222;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Streetunes</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Streetunes 🎵</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-controller="Event" asp-action="Index">Events</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Index">Events</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <form asp-area="" asp-controller="Account" asp-action="Logout">
-                                    <button class="btn btn-outline-secondary text-dark">Logout</button>
-                                </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <form asp-area="" asp-controller="Account" asp-action="Login">
-                                    <button class="btn btn-outline-secondary text-dark">Login</button>
-                                </form>
-                            </li>
-                        }
                     </ul>
 
-                    <!-- User Info Section -->
+                    <!-- User Section -->
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item d-flex align-items-center">
-                                <!-- Optional Profile Picture (if user has one) -->
-                                <a asp-controller="User" asp-action="Detail" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">
-                                   <img src="@User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value" alt="Profile" class="rounded-circle" width="30" height="30" />
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="@User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value"
+                                         class="profile-img me-2" alt="Profile">
+                                    <span>@User.Identity.Name</span>
                                 </a>
-                                <span class="ms-2 text-dark">@User.Identity.Name</span> <!-- User's Name -->
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Detail" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Profile</a></li>
+                                    <li>
+                                    <li class="dropdown-item">
+                                        <form asp-area="" asp-controller="Account" asp-action="Logout">
+                                            <button class="btn btn-outline-secondary text-dark">Logout</button>
+                                        </form>
+                                    </li>
+                            </li>
+                                    
+                                </ul>
                             </li>
                         </ul>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light">Login</a>
                     }
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container mt-4">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer mt-5">
         <div class="container">
-            &copy; 2025 - Streetunes - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - Streetunes - <a asp-controller="Home" asp-action="Privacy" class="text-light">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

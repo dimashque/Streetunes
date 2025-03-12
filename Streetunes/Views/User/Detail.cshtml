@@ -2,29 +2,37 @@
 @model UserDetailViewModel
 
 <div class="container mt-5">
-    <div class="card shadow-lg p-4">
+    <div class="card shadow-lg p-4 rounded bg-dark text-light">
         <div class="row">
             <!-- Profile Info Section -->
             <div class="col-md-4 text-center">
-                <img src="@(Model.ProfileImageUrl ?? "/images/default-profile.png")" class="rounded-circle img-fluid mb-3" alt="Profile Image" style="width: 150px; height: 150px; object-fit: cover;">
+                <img src="@(Model.ProfileImageUrl ?? "/images/default-profile.png")" class="rounded-circle border border-3 border-warning img-fluid mb-3"
+                     alt="Profile Image" style="width: 180px; height: 180px; object-fit: cover;">
                 <h2 class="fw-bold">@Model.UserName</h2>
-                <p class="text-muted">@Model.City, @Model.State</p>
+                <p class="text-warning">@Model.City, @Model.State</p>
+
+                <!-- Buttons for Edit Profile & Create Event -->
+                <div class="d-flex justify-content-center gap-3 mt-3">
+                    <a asp-controller="Event" asp-action="Create" class="btn btn-warning fw-bold px-4">🎤 Create Event</a>
+                    <a asp-controller="User" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-light fw-bold px-4">✏️ Edit Profile</a>
+                </div>
             </div>
 
-            <!-- Recent Events Section -->
+            <!-- Events Section -->
             <div class="col-md-8">
-                <h3 class="fw-bold">Created Events</h3>
+                <h3 class="fw-bold border-bottom pb-2">🎭 Created Events</h3>
                 @if (Model.CreatedEvents != null && Model.CreatedEvents.Any())
                 {
                     <div class="row row-cols-1 row-cols-md-2 g-4">
                         @foreach (var ev in Model.CreatedEvents)
                         {
                             <div class="col">
-                                <div class="card h-100 shadow-sm">
-                                    <img src="@(ev?.Image ?? "/images/default-event.jpg")" class="card-img-top" alt="@(ev?.Title ?? "Untitled Event")" style="height: 180px; object-fit: cover;">
+                                <div class="card h-100 shadow-lg bg-secondary text-light border-0">
+                                    <img src="@(ev?.Image ?? "/images/default-event.jpg")" class="card-img-top"
+                                         alt="@(ev?.Title ?? "Untitled Event")" style="height: 180px; object-fit: cover;">
                                     <div class="card-body">
-                                        <h5 class="card-title">@ev?.Title</h5>
-                                        <p class="card-text text-muted">@ev?.Date.ToString("MMM dd, yyyy")</p>
+                                        <h5 class="card-title fw-bold">@ev?.Title</h5>
+                                        <p class="card-text text-warning">@ev?.Date.ToString("MMM dd, yyyy")</p>
                                     </div>
                                 </div>
                             </div>
@@ -36,18 +44,19 @@
                     <p class="text-muted">No events were created.</p>
                 }
 
-                <h3 class="fw-bold mt-4">Attended Events</h3>
+                <h3 class="fw-bold mt-4 border-bottom pb-2">🎶 Attended Events</h3>
                 @if (Model.Events != null && Model.Events.Any())
                 {
                     <div class="row row-cols-1 row-cols-md-2 g-4">
                         @foreach (var ev in Model.Events)
                         {
                             <div class="col">
-                                <div class="card h-100 shadow-sm">
-                                    <img src="@(ev?.Image ?? "/images/default-event.jpg")" class="card-img-top" alt="@(ev?.Title ?? "Untitled Event")" style="height: 180px; object-fit: cover;">
+                                <div class="card h-100 shadow-lg bg-secondary text-light border-0">
+                                    <img src="@(ev?.Image ?? "/images/default-event.jpg")" class="card-img-top"
+                                         alt="@(ev?.Title ?? "Untitled Event")" style="height: 180px; object-fit: cover;">
                                     <div class="card-body">
-                                        <h5 class="card-title">@ev?.Title</h5>
-                                        <p class="card-text text-muted">@ev?.Date.ToString("MMM dd, yyyy")</p>
+                                        <h5 class="card-title fw-bold">@ev?.Title</h5>
+                                        <p class="card-text text-warning">@ev?.Date.ToString("MMM dd, yyyy")</p>
                                     </div>
                                 </div>
                             </div>
