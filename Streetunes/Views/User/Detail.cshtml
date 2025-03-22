@@ -1,73 +1,115 @@
 ﻿@using Streetunes.ViewModel
 @model UserDetailViewModel
 
-<div class="container mt-5">
-    <div class="card shadow-lg p-4 rounded bg-dark text-light">
-        <div class="row">
-            <!-- Profile Info Section -->
-            <div class="col-md-4 text-center">
-                <img src="@(Model.ProfileImageUrl ?? "/images/default-profile.png")" class="rounded-circle border border-3 border-warning img-fluid mb-3"
-                     alt="Profile Image" style="width: 180px; height: 180px; object-fit: cover;">
-                <h2 class="fw-bold">@Model.UserName</h2>
-                <p class="text-warning">@Model.City, @Model.State</p>
+<div id="page-content" class="d-none">
+    <div class="container mt-5">
+        <div class="card shadow-lg p-4 rounded bg-dark text-light">
+            <div class="row">
+                <input type="hidden" id="Id" name="Id" asp-for="Id" />
+                <!-- Left Section: Profile Info and 3D Avatar -->
+                <div class="col-md-4 d-flex flex-column justify-content-between text-center mb-4 mb-md-0">
+                    <!-- Profile Info Section -->
+                    <div class="mb-4">
+                        <h2 class="fw-bold">@Model.UserName</h2>
+                        <p class="text-warning">@Model.City, @Model.State</p>
+                        <div class="d-flex justify-content-center gap-3 mt-3">
+                            <a asp-controller="Event" asp-action="Create" class="btn btn-warning fw-bold px-4">🎤 Create Event</a>
+                            <a asp-controller="User" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-light fw-bold px-4">✏️ Edit Profile</a>
+                        </div>
+                    </div>
 
-                <!-- Buttons for Edit Profile & Create Event -->
-                <div class="d-flex justify-content-center gap-3 mt-3">
-                    <a asp-controller="Event" asp-action="Create" class="btn btn-warning fw-bold px-4">🎤 Create Event</a>
-                    <a asp-controller="User" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-light fw-bold px-4">✏️ Edit Profile</a>
+                    <!-- 3D Avatar Section -->
+                    <div class="d-flex justify-content-center mt-3">
+                        <canvas id="threeCanvas" style="width: 100%; height: 250px; max-width: 350px;"></canvas>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Events Section -->
-            <div class="col-md-8">
-                <h3 class="fw-bold border-bottom pb-2">🎭 Created Events</h3>
-                @if (Model.CreatedEvents != null && Model.CreatedEvents.Any())
-                {
-                    <div class="row row-cols-1 row-cols-md-2 g-4">
-                        @foreach (var ev in Model.CreatedEvents)
-                        {
-                            <div class="col">
-                                <div class="card h-100 shadow-lg bg-secondary text-light border-0">
-                                    <img src="@(ev?.Image ?? "/images/default-event.jpg")" class="card-img-top"
-                                         alt="@(ev?.Title ?? "Untitled Event")" style="height: 180px; object-fit: cover;">
-                                    <div class="card-body">
-                                        <h5 class="card-title fw-bold">@ev?.Title</h5>
-                                        <p class="card-text text-warning">@ev?.Date.ToString("MMM dd, yyyy")</p>
+                <!-- Right Section: Events -->
+                <div class="col-md-8">
+                    <h3 class="fw-bold border-bottom pb-2">🎭 Created Events</h3>
+                    @if (Model.CreatedEvents != null && Model.CreatedEvents.Any())
+                    {
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            @foreach (var ev in Model.CreatedEvents)
+                            {
+                                <div class="col">
+                                    <div class="card h-100 shadow-lg bg-secondary text-light border-0">
+                                        <img src="@(ev?.Image ?? "/images/default-event.jpg")" class="card-img-top"
+                                             alt="@(ev?.Title ?? "Untitled Event")" style="height: 180px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">@ev?.Title</h5>
+                                            <p class="card-text text-warning">@ev?.Date.ToString("MMM dd, yyyy")</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
-                    </div>
-                }
-                else
-                {
-                    <p class="text-muted">No events were created.</p>
-                }
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No events were created.</p>
+                    }
 
-                <h3 class="fw-bold mt-4 border-bottom pb-2">🎶 Attended Events</h3>
-                @if (Model.Events != null && Model.Events.Any())
-                {
-                    <div class="row row-cols-1 row-cols-md-2 g-4">
-                        @foreach (var ev in Model.Events)
-                        {
-                            <div class="col">
-                                <div class="card h-100 shadow-lg bg-secondary text-light border-0">
-                                    <img src="@(ev?.Image ?? "/images/default-event.jpg")" class="card-img-top"
-                                         alt="@(ev?.Title ?? "Untitled Event")" style="height: 180px; object-fit: cover;">
-                                    <div class="card-body">
-                                        <h5 class="card-title fw-bold">@ev?.Title</h5>
-                                        <p class="card-text text-warning">@ev?.Date.ToString("MMM dd, yyyy")</p>
+                    <h3 class="fw-bold mt-4 border-bottom pb-2">🎶 Attended Events</h3>
+                    @if (Model.Events != null && Model.Events.Any())
+                    {
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            @foreach (var ev in Model.Events)
+                            {
+                                <div class="col">
+                                    <div class="card h-100 shadow-lg bg-secondary text-light border-0">
+                                        <img src="@(ev?.Image ?? "/images/default-event.jpg")" class="card-img-top"
+                                             alt="@(ev?.Title ?? "Untitled Event")" style="height: 180px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">@ev?.Title</h5>
+                                            <p class="card-text text-warning">@ev?.Date.ToString("MMM dd, yyyy")</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
-                    </div>
-                }
-                else
-                {
-                    <p class="text-muted">No events were attended.</p>
-                }
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No events were attended.</p>
+                    }
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Loading Spinner -->
+<div id="loading" class="d-flex justify-content-center align-items-center vh-100 bg-dark text-light">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<script type="module" src="/js/3dScene.js"></script>
+
+<script>
+    // Function to detect when the 3D scene is ready and then reveal the rest of the page
+    window.addEventListener('load', function () {
+        const canvas = document.getElementById('threeCanvas');
+
+        // Assuming the 3D scene script does something like this
+        if (canvas) {
+            // Start loading the 3D scene
+            load3DScene().then(() => {
+                // Once the 3D scene is loaded, show the rest of the page
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('page-content').classList.remove('d-none');
+            });
+        }
+    });
+
+    // Dummy function to simulate the loading of the 3D scene (you can replace this with actual logic)
+    function load3DScene() {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, 3000); // Simulating 3 seconds for scene loading
+        });
+    }
+</script>

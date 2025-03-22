@@ -42,6 +42,8 @@ if (args.Length == 1 && args[0].ToLower() == "seeddata")
      Seed.SeedData(app);
 }
 
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -52,6 +54,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    ServeUnknownFileTypes = true, // Allow unknown file types
+    DefaultContentType = "application/javascript" // Fix MIME type issue
+});
 
 app.UseRouting();
 
